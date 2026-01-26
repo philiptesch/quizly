@@ -173,8 +173,13 @@ python manage.py runserver
 ```bash
 python manage.py createsuperuser
 ````
+API will be available at:
+`http://127.0.0.1:8000/`
 
 ---
+
+
+
 
 ## Key Technologies / Libraries
 
@@ -190,25 +195,15 @@ python manage.py createsuperuser
 * **NumPy, Torch, SymPy, NetworkX** – Data processing and AI support
 
 ---
+### ⚠️⚠️⚠️ IMPORTANT Install FFmpeg ⚠️⚠️⚠️
 
-## Running the Project
+FFmpeg is required to process audio/video for Whisper and YouTube downloads.
 
-1. Apply migrations:
+1. Download FFmpeg from https://ffmpeg.org/download.html
 
-```bash
-python manage.py migrate
-```
+2. Extract the folder and add the bin directory to your system PATH.
 
-2. Start the development server:
-
-```bash
-python manage.py runserver
-```
-
-API will be available at:
-`http://127.0.0.1:8000/`
-
----
+⚠️ Warning: Without FFmpeg, audio transcription and video downloads will fail.
 
 ## Endpoints
 
