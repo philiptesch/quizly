@@ -125,23 +125,20 @@ This project uses a **`.env` file** to store sensitive configuration values such
 #### 1. Create a `.env` file
 
 
-create it manually:
-
-```bash
-touch .env
-```
-
 #### 2. Add your API keys and settings
 
 Example `.env` content:
 
+# Gemini API Key for quiz generation
+# You can get your Gemini API key from https://developers.generativeai.google/
+
 ```env
 GEMINI_API_KEY=your_api_key_here
-WHISPER_API_KEY=your_api_key_here
 DJANGO_SECRET_KEY=your_django_secret_key
 ```
 
 > **Note:** Never commit your `.env` file to version control.
+> Keep this file private and do not commit it to Git.
 
 #### 3. Automatic loading with `python-dotenv`
 
