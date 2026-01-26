@@ -5,7 +5,22 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
 
 class RegistrationSerializer(serializers.ModelSerializer):
+    """
+    Serializer for user registration.
 
+    Fields:
+        - username: Unique username for the account
+        - email: User email address
+        - password: Account password (write-only)
+        - confirmed_password: Password confirmation (write-only)
+
+    Validation:
+        - Ensures that password and confirmed_password match.
+
+    Behavior:
+        - Creates a new user instance.
+        - Password is hashed using Django's set_password method.
+    """
 
     confirmed_password = serializers.CharField(write_only=True)
 
@@ -30,15 +45,26 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return account
 
 class LoginSeralizer(TokenObtainPairSerializer):
-    id = serializers.IntegerField(read_only=True)
+    """
+    Serializer for user authentication using JWT.
 
+    Fields:
+        - id: User ID (read-only)
+        - username: Username used for login (write-only)
+        - password: User password (write-only)
+        - email: User email (not required for login but part of model fields)
+
+    Validation:
+        - Verifies that the username exists.
+        - Verifies that the password is correct.
+        - If valid, returns JWT access and refresh tokens.
+    """
+    
+    id = serializers.IntegerField(read_only=True)
     class Meta:
         model = User
         fields = ['id','username', 'password', 'email']
-        extra_kwargs = {
-            'username': {'write_only': True},
-            'password': {'write_only': True},
-        }
+        extra_kwargs = {'username': {'write_only': True},'password': {'write_only': True},}
 
     def validate(self, attrs):
         

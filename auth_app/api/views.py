@@ -11,6 +11,19 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
 class RegistrationView(generics.CreateAPIView):
+    """
+    API endpoint for user registration.
+
+    Permissions:
+        - Public endpoint (no authentication required).
+
+    Behavior:
+        - POST:
+            - Validates registration data using RegistrationSerializer.
+            - Creates a new user account.
+            - Returns a success message on successful registration.
+            - Returns validation errors if input data is invalid.
+    """
 
     serializer_class = RegistrationSerializer
 
@@ -26,6 +39,20 @@ class RegistrationView(generics.CreateAPIView):
 
 
 class LoginCookieView(TokenObtainPairView):
+    """
+    API endpoint for user login using JWT stored in HTTP-only cookies.
+
+    Permissions:
+        - Public endpoint (no authentication required).
+
+    Behavior:
+        - POST:
+            - Validates user credentials.
+            - Returns user info on success.
+            - Stores access and refresh tokens in secure HTTP-only cookies.
+            - Returns 401 if authentication fails.
+    """
+    
     serializer_class = LoginSeralizer
 
     def post(self, request, *args, **kwargs):
@@ -34,10 +61,7 @@ class LoginCookieView(TokenObtainPairView):
             return Response(seralizer.errors, status=status.HTTP_401_UNAUTHORIZED)
         refresh = seralizer.validated_data['refresh']
         access = seralizer.validated_data['access']
-        response = Response({"detail": "Login successfully!","user": {'id': seralizer.user.id,'username': seralizer.user.username,'email': seralizer.user.email}
-    },
-    status=status.HTTP_200_OK
-)
+        response = Response({"detail": "Login successfully!","user": {'id': seralizer.user.id,'username': seralizer.user.username,'email': seralizer.user.email}},status=status.HTTP_200_OK)
 
         response.set_cookie(
             key="access_token", value=access, httponly=True, secure=True, samesite="Lax")
@@ -48,14 +72,25 @@ class LoginCookieView(TokenObtainPairView):
     
 
 class LogoutView(APIView):
+    """
+    API endpoint for logging out a user.
+
+    Permissions:
+        - User must be authenticated.
+
+    Behavior:
+        - POST:
+            - Deletes access and refresh token cookies.
+            - Returns a success message.
+            - Returns 400 if no access token cookie is found.
+    """
+
     permission_classes = [IsAuthenticated]
 
 
     def post(self, request, *args, **kwargs):
 
         access_token = request.COOKIES.get("access_token")
-
-
         if access_token is None:
             return Response({"detail": "access_token not found"}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -69,8 +104,21 @@ class LogoutView(APIView):
 
 
 class RefreshTokenView(TokenRefreshView):
+    """
+    API endpoint to refresh the JWT access token using the refresh token.
 
-        def post(self, request, *args, **kwargs):
+    Permissions:
+        - Requires valid refresh token in cookies and Authorization header.
+
+    Behavior:
+        - POST:
+            - Compares refresh token from cookies and Authorization header.
+            - If valid, generates a new access token.
+            - Stores the new access token in an HTTP-only cookie.
+            - Returns 401 if tokens are missing or do not match.
+    """
+
+    def post(self, request, *args, **kwargs):
             token = request.headers.get("Authorization")
             refresh_token = request.COOKIES.get("refresh_token")
 

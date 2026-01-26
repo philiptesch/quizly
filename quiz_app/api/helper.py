@@ -7,6 +7,17 @@ from glob import glob
 from pathlib import Path
 
 def check_video(url: str):
+    """
+    Check whether a given video URL is valid and accessible.
+
+    Args:
+        url (str): Video URL to be checked.
+
+    Returns:
+        bool:
+            - True if the video exists and metadata can be extracted.
+            - False if the video is unavailable or invalid.
+    """
     try:
         ydl_opts = {}
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -17,6 +28,22 @@ def check_video(url: str):
 
 
 def video_download(url: str):
+    """
+    Download the audio stream from a video URL.
+
+    Behavior:
+        - Validates the video URL before downloading.
+        - Downloads the best available audio format.
+        - Stores the audio file in the media directory.
+
+    Args:
+        url (str): Video URL.
+
+    Returns:
+        str | bool:
+            - Path to the downloaded audio file on success.
+            - False if validation or download fails.
+    """
     udid = secrets.randbelow(100) + 1
     
     audio_data = f"media/audio_{udid}."
@@ -35,6 +62,15 @@ def video_download(url: str):
 
 
 def transcripts_Audio_to_Text(audio:str):
+    """
+    Transcribe an audio file into text using OpenAI Whisper.
+
+    Args:
+        audio (str): Path to the audio file.
+
+    Returns:
+        str: Transcribed text extracted from the audio.
+    """
 
     model = whisper.load_model("base")
     audio_path = str(Path(audio))
@@ -44,6 +80,17 @@ def transcripts_Audio_to_Text(audio:str):
 
 
 def promted_Text():
+    """
+    Generate the prompt instructions for the AI quiz generator.
+
+    Behavior:
+        - Defines the exact JSON structure required for quiz creation.
+        - Enforces strict rules for number of questions and answers.
+
+    Returns:
+        str: Prompt text sent to the AI model.
+    """
+
     return """
 The quiz must follow this exact structure:
 
@@ -68,12 +115,29 @@ Requirements:
 """ 
 
 def create_Quiz_with_GeminiAPI(transcript):
-        client = genai.Client()
-        prompt_text = promted_Text()
-        response = client.models.generate_content(
-        model="gemini-3-flash-preview",
-        contents=prompt_text+transcript,)
-        print(response.text)
-        prompt = response.text.replace("\n", " ").strip()
-        data = json.loads(prompt)
-        return data
+    """
+    Generate a quiz from a transcript using the Gemini AI API.
+
+    Behavior:
+        - Sends transcript text with strict prompt instructions.
+        - Receives AI-generated quiz data in JSON format.
+        - Parses and returns the JSON as a Python dictionary.
+
+    Args:
+        transcript (str): Transcribed text from the video audio.
+
+    Returns:
+        dict: Parsed quiz data including title, description, and questions.
+
+    Raises:
+        json.JSONDecodeError: If the AI response is not valid JSON.
+    """
+    client = genai.Client()
+    prompt_text = promted_Text()
+    response = client.models.generate_content(
+    model="gemini-3-flash-preview",
+    contents=prompt_text+transcript,)
+    print(response.text)
+    prompt = response.text.replace("\n", " ").strip()
+    data = json.loads(prompt)
+    return data
