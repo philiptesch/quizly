@@ -1,5 +1,37 @@
 # 📘 Quiz API – README
 
+
+
+## Project Structure
+
+This project is organized as follows:
+quiz_project/
+├─ core/                    # Core Django settings
+│ ├─ settings.py            # Django settings and configurations
+│ ├─ urls.py                # Project-wide URLs
+│ └─ wsgi.py / asgi.py      # WSGI/ASGI application entry points
+│
+├─ quiz_app/                # Main quiz functionality
+│ ├─ api/                   # API module for quizzes
+│ │ ├─ views.py             # Quiz API views
+│ │ ├─ serializers.py       # Quiz and Question serializers
+│ │ ├─ urls.py              # Quiz app URLs
+│ │ ├─ permissions.py       # Custom permissions (e.g., owner check)
+│ │ └─ helpers.py           # Functions for YouTube download & transcription
+│ └─ models.py              # Quiz and Question models
+│
+├─ auth_app/                # User authentication functionality
+│ ├─ api/                   # API module for auth
+│ │ ├─ views.py             # Registration, Login, Logout, Token refresh
+│ │ ├─ serializers.py       # Auth serializers
+│ │ └─ urls.py              # Auth app URLs
+│ └─ models.py              # Optional custom user models (if any)
+│
+├─ manage.py                # Django management commands
+└─ requirements.txt         # Project dependencies
+
+
+
 ## Overview
 
 The **Quiz API** allows users to:
