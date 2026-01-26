@@ -1,36 +1,37 @@
 # 📘 Quiz API – README
 
-
-
 ## Project Structure
 
 This project is organized as follows:
+
+```
 quiz_project/
-├─ core/                    # Core Django settings
-│ ├─ settings.py            # Django settings and configurations
-│ ├─ urls.py                # Project-wide URLs
-│ └─ wsgi.py / asgi.py      # WSGI/ASGI application entry points
+├─ core/                  # Core Django settings
+│  ├─ settings.py         # Django settings and configurations
+│  ├─ urls.py             # Project-wide URLs
+│  └─ wsgi.py / asgi.py   # WSGI/ASGI application entry points
 │
-├─ quiz_app/                # Main quiz functionality
-│ ├─ api/                   # API module for quizzes
-│ │ ├─ views.py             # Quiz API views
-│ │ ├─ serializers.py       # Quiz and Question serializers
-│ │ ├─ urls.py              # Quiz app URLs
-│ │ ├─ permissions.py       # Custom permissions (e.g., owner check)
-│ │ └─ helpers.py           # Functions for YouTube download & transcription
-│ └─ models.py              # Quiz and Question models
+├─ quiz_app/              # Main quiz functionality
+│  ├─ api/                # API module for quizzes
+│  │  ├─ views.py         # Quiz API views
+│  │  ├─ serializers.py   # Quiz and Question serializers
+│  │  ├─ urls.py          # Quiz app URLs
+│  │  ├─ permissions.py   # Custom permissions (e.g., owner check)
+│  │  └─ helpers.py       # Functions for YouTube download & transcription
+│  └─ models.py           # Quiz and Question models
 │
-├─ auth_app/                # User authentication functionality
-│ ├─ api/                   # API module for auth
-│ │ ├─ views.py             # Registration, Login, Logout, Token refresh
-│ │ ├─ serializers.py       # Auth serializers
-│ │ └─ urls.py              # Auth app URLs
-│ └─ models.py              # Optional custom user models (if any)
+├─ auth_app/              # User authentication functionality
+│  ├─ api/                # API module for auth
+│  │  ├─ views.py         # Registration, Login, Logout, Token refresh
+│  │  ├─ serializers.py   # Auth serializers
+│  │  └─ urls.py          # Auth app URLs
+│  └─ models.py           # Optional custom user models (if any)
 │
-├─ manage.py                # Django management commands
-└─ requirements.txt         # Project dependencies
+├─ manage.py             # Django management commands
+└─ requirements.txt      # Project dependencies
+```
 
-
+> **Note:** The `.env` file should be placed at the project root (`quiz_project/.env`). It will be automatically loaded by `python-dotenv` in `core/settings.py`.
 
 ## Overview
 
@@ -108,8 +109,13 @@ This project uses a **`.env` file** to store sensitive configuration values such
 
 #### 1. Create a `.env` file
 
+Copy the example file:
 
-create it manually:
+```bash
+cp .env.example .env
+```
+
+Or create it manually:
 
 ```bash
 touch .env
@@ -351,6 +357,8 @@ Delete a quiz permanently.
 | 403  | Access denied         |
 | 404  | Not found             |
 | 500  | Internal server error |
+
+---
 
 ---
 
