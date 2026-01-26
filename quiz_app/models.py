@@ -16,7 +16,7 @@ class Quizz(models.Model):
     
 
 class Question(models.Model):
-    quizz = models.ForeignKey(Quizz, on_delete=models.CASCADE, related_name='quizz')
+    quizz = models.ForeignKey(Quizz, on_delete=models.CASCADE, related_name='questions')
     question_title = models.CharField(max_length=200)
     question_options = models.JSONField()
     answer=models.CharField()
