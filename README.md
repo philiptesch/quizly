@@ -103,19 +103,29 @@ pip install -r requirements.txt
 
 ---
 
-### 🌱 Environment Variables
+4. Generate Secret Key
+
+Run the following command in your terminal:
+
+```bash
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+
+You will get a key like:
+
+```bash
+django-insecure-4x9v$k2l^8p@1m!zq7e+3r#t6y%u0w
+```
+
+
+### 1.  🌱 Environment Variables
 
 This project uses a **`.env` file** to store sensitive configuration values such as API keys (Gemini, Whisper, etc.).
 
 #### 1. Create a `.env` file
 
-Copy the example file:
 
-```bash
-cp .env.example .env
-```
-
-Or create it manually:
+create it manually:
 
 ```bash
 touch .env
@@ -146,6 +156,26 @@ load_dotenv()  # loads .env variables
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 ```
+
+#### 4. Run Migrations
+
+Once your .env file is ready, run the migrations to initialize the database: 
+
+
+```bash
+python manage.py migrate
+```
+After this, your Django project is ready to run:
+
+```bash
+python manage.py runserver
+```
+
+#### 5. Create a superuser
+
+```bash
+python manage.py createsuperuser
+````
 
 ---
 
