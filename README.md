@@ -129,13 +129,28 @@ This project uses a **`.env` file** to store sensitive configuration values such
 
 Example `.env` content:
 
+Copy the template .env.example:
+
+
+```bash
+cp .env.example .env
+```
+Do not commit .env to Git!
+
+# Add your API keys and settings
 # Gemini API Key for quiz generation
 # You can get your Gemini API key from https://developers.generativeai.google/
 
 ```env
+# Django Secret Key – please generate your own
+DJANGO_SECRET_KEY=your_django_secret_key_here
+
+# Gemini API Key for quiz generation
+# You can get your Gemini API key from https://developers.generativeai.google/
 GEMINI_API_KEY=your_api_key_here
-DJANGO_SECRET_KEY=your_django_secret_key
 ```
+After copying .env.example to .env, replace the placeholders with your real keys.
+
 
 > **Note:** Never commit your `.env` file to version control.
 > Keep this file private and do not commit it to Git.
