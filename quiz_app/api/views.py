@@ -11,7 +11,6 @@ from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDe
 from rest_framework import generics,viewsets,filters,status
 from django.shortcuts import get_object_or_404
 from .permission import isOwnerFromTheQuiz
-from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class CreateQuizView(APIView):

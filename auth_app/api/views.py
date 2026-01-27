@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import (
 )
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-
+from rest_framework_simplejwt.tokens import RefreshToken
 class RegistrationView(generics.CreateAPIView):
     """
     API endpoint for user registration.
@@ -91,10 +91,14 @@ class LogoutView(APIView):
     def post(self, request, *args, **kwargs):
 
         access_token = request.COOKIES.get("access_token")
+        refresh_token = request.COOKIES.get("refresh_token")
         if access_token is None:
             return Response({"detail": "access_token not found"}, status=status.HTTP_400_BAD_REQUEST)
         
         response = Response({"detail": "Log-Out successfully! All Tokens will be deleted. Refresh token is now invalid."}, status=status.HTTP_200_OK)
+
+        token = RefreshToken(refresh_token)
+        token.blacklist()
 
         response.delete_cookie(key='refresh_token')
         response.delete_cookie(key='access_token')
