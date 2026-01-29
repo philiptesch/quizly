@@ -85,7 +85,6 @@ cd <repository_folder>
 
 ```powershell
 python -m venv env
-.\env\Scripts\Activate.ps1
 ```
 after 
 
