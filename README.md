@@ -19,6 +19,7 @@ quiz_project/
 │  │  ├─ permissions.py   # Custom permissions (e.g., owner check)
 │  │  └─ helpers.py       # Functions for YouTube download & transcription
 │  └─ models.py           # Quiz and Question models
+   └─ authentication.py   #  Custom JWT authentication
 │
 ├─ auth_app/              # User authentication functionality
 │  ├─ api/                # API module for auth
