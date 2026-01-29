@@ -215,7 +215,7 @@ API will be available at:
 
 
 
-## Key Technologies / Libraries
+## 3. Key Technologies / Libraries
 
 * **Django 5.2.8** – Web framework
 * **djangorestframework 3.16.1** – REST API support
@@ -258,7 +258,7 @@ Register a new user.
 }
 ```
 
-** 3. Status Codes:**
+**  Status Codes:**
 
 * 201 – User created successfully
 * 400 – Invalid data
