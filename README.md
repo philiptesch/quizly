@@ -1,5 +1,11 @@
 # 📘 Quiz API – README
 
+Project Quizly
+
+📘 📘Quizly is an AI-powered platform that transforms YouTube videos into interactive quizzes.
+It automatically extracts audio, transcribes content with advanced speech recognition,
+and generates 10 well-crafted questions per video, making learning engaging, efficient, and accessible for everyone.📘 📘
+
 ## Project Structure
 
 This project is organized as follows:
@@ -56,7 +62,7 @@ Authentication is handled with **access_token** and **refresh_token** stored as 
 
 ---
 
-## Requirements & Setup
+## 1. Requirements & Setup
 
 ### Prerequisites
 
@@ -79,6 +85,10 @@ cd <repository_folder>
 
 ```powershell
 python -m venv env
+```
+after 
+
+```powershell
 .\env\Scripts\Activate.ps1
 ```
 
@@ -86,6 +96,10 @@ python -m venv env
 
 ```cmd
 python -m venv env
+```
+after 
+
+```cmd
 env\Scripts\activate.bat
 ```
 
@@ -93,6 +107,10 @@ env\Scripts\activate.bat
 
 ```bash
 python3 -m venv env
+```
+after
+
+```bash
 source env/bin/activate
 ```
 
@@ -138,7 +156,7 @@ cp .env.example .env
 ```
 Do not commit .env to Git!
 
-# Add your API keys and settings
+# 2. Add your API keys and settings
 # Gemini API Key for quiz generation
 # You can get your Gemini API key from https://developers.generativeai.google/
 
@@ -197,7 +215,7 @@ API will be available at:
 
 
 
-## Key Technologies / Libraries
+## 3. Key Technologies / Libraries
 
 * **Django 5.2.8** – Web framework
 * **djangorestframework 3.16.1** – REST API support
@@ -240,7 +258,7 @@ Register a new user.
 }
 ```
 
-**Status Codes:**
+**  Status Codes:**
 
 * 201 – User created successfully
 * 400 – Invalid data
@@ -399,10 +417,6 @@ Delete a quiz permanently.
 ---
 
 ---
-
-## 🤝 Contributing
-Contributions are welcome!  
-If you'd like to improve this project, open an issue or submit a pull request.
 
 
 ## 🤝 Contributing
