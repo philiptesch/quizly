@@ -2,9 +2,9 @@
 
 Project Quizly
 
-📘 📘Quizly is an intelligent quiz generation platform that leverages cutting-edge AI technology
-to transform YouTube videos into interactive learning experiences. The application automatically extracts audio from videos, transcribes content using advanced speech recognition,
-and generates comprehensive quizzes with 10 carefully crafted questions. 📘 📘
+📘 📘Quizly is an AI-powered platform that transforms YouTube videos into interactive quizzes.
+It automatically extracts audio, transcribes content with advanced speech recognition,
+and generates 10 well-crafted questions per video, making learning engaging, efficient, and accessible for everyone.📘 📘
 
 ## Project Structure
 
