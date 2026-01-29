@@ -44,12 +44,18 @@ def video_download(url: str):
             - Path to the downloaded audio file on success.
             - False if validation or download fails.
     """
-    udid = secrets.randbelow(100) + 1
+    udid = secrets.randbelow(1000) + 1
     
     audio_data = f"media/audio_{udid}."
     URL = url
     if check_video(url):
-        ydl_opts = {"format": "bestaudio/best","outtmpl": f"{audio_data}%(ext)s","quiet": False,"noplaylist": True,}
+        ydl_opts = {"format": "bestaudio/best","outtmpl": f"{audio_data}%(ext)s","quiet": False,"noplaylist": True, 
+                    "cookiefile": "cookies.txt",
+                "extractor_args": {
+                "youtube": {
+                "player_client": ["default,-android_sdkless"]
+            }
+        },}
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             error_code = ydl.download([URL])    
             audio_files = glob(f"{audio_data}*")

@@ -57,7 +57,6 @@ class QuestionListSeralizer(serializers.ModelSerializer):
         def validate(self, attrs):
             question_options = attrs.get("question_options")
             answer = attrs.get("answer")
-            print(answer)
 
             if answer not in question_options:
                 raise serializers.ValidationError("Answer must be one of the question options")

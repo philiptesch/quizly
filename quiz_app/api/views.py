@@ -44,7 +44,7 @@ class CreateQuizView(APIView):
         if audio_data:
             transcripted_text = transcripts_Audio_to_Text(audio_data)
         else:
-            Response({"Download failed"}, status=status.HTTP_400_BAD_REQUEST)
+          return Response({"Download failed"}, status=status.HTTP_400_BAD_REQUEST)
 
         quiz_json = create_Quiz_with_GeminiAPI(transcripted_text)
         serializer = QuizSerializer(data=quiz_json)
