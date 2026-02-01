@@ -107,7 +107,7 @@ The quiz must follow this exact structure:
     {
       "question_title": "The question goes here.",
       "question_options": ["Option A", "Option B", "Option C", "Option D"],
-      "answer": "The correct answer from the above question_options like Option A and no exact text"
+      "answer": "The correct answer from the above options"
     }
   ]
 }
@@ -143,7 +143,6 @@ def create_Quiz_with_GeminiAPI(transcript):
     response = client.models.generate_content(
     model="gemini-3-flash-preview",
     contents=prompt_text+transcript,)
-    print(response.text)
     prompt = response.text.replace("\n", " ").strip()
     data = json.loads(prompt)
     return data
