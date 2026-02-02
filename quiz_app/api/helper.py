@@ -5,6 +5,10 @@ from google import genai
 import secrets
 from glob import glob
 from pathlib import Path
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.exceptions import ValidationError
+
 
 def check_video(url: str):
     """
@@ -65,6 +69,23 @@ def video_download(url: str):
                  return False
     else:
         return False
+    
+
+def check_url_format(url: str):
+    """
+    Validate a YouTube URL.
+
+    Args:
+        url (str): YouTube URL to validate.
+
+    Raises:
+        ValidationError: If the URL is missing or invalid.
+    """
+    if url is None:
+             return Response({'detail': "url is missing"}, status=status.HTTP_400_BAD_REQUEST )
+
+    if not url.startswith('https://www.youtube.com/watch?v='):
+           return Response({'detail': "The entered URL is incorrect. The URL must begin with https://www.youtube.com/watch?v="}, status=status.HTTP_400_BAD_REQUEST )
 
 
 def transcripts_Audio_to_Text(audio:str):

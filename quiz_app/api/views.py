@@ -1,45 +1,50 @@
-from rest_framework import serializers
 from rest_framework.views import APIView
-from .seralizers import QuestionSeralizer, QuizSerializer, QuizListSeralizer
+from .seralizers import  QuizSerializer, QuizListSeralizer
 from quiz_app.models import Quiz, Question
 from rest_framework.response import Response
-from .helper import video_download, transcripts_Audio_to_Text, create_Quiz_with_GeminiAPI
+from .helper import video_download, transcripts_Audio_to_Text, create_Quiz_with_GeminiAPI, check_url_format
 from rest_framework import status
-from pathlib import Path
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework import generics,viewsets,filters,status
+from rest_framework.generics import  ListAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework import status
 from django.shortcuts import get_object_or_404
 from .permission import isOwnerFromTheQuiz
-
+from rest_framework.exceptions import ValidationError
 
 class CreateQuizView(APIView):
     """
-    Create a quiz from a video URL.
+    API view to create a quiz from a YouTube video URL.
 
     Permissions:
         - User must be authenticated.
-
-    Behavior:
-        - POST: 
-            1. Receives a video URL.
-            2. Downloads the video audio.
-            3. Transcribes audio to text.
-            4. Generates quiz data using Gemini API.
-            5. Saves the quiz and related questions to the database.
-            6. Returns the created quiz with its questions.
     """
     serializer_class=QuizSerializer
     permission_classes = [IsAuthenticated]
+
+
     def post(self, request):
+        """
+        Handle POST request to create a quiz:
+        
+        Steps:
+            1. Validate the provided YouTube URL.
+            2. Download the video's audio.
+            3. Transcribe audio to text.
+            4. Generate quiz data using the Gemini API.
+            5. Save the quiz and related questions to the database.
+            6. Return the created quiz along with its questions.
+
+        Request Data:
+            - url (str): YouTube video URL (must start with 'https://www.youtube.com/watch?v=')
+
+        Responses:
+            - 201 Created: Quiz successfully created with questions.
+            - 400 Bad Request: URL missing, invalid URL, or download/transcription failed.
+            - 401 UNAUTHORIZED: only a registed user is allowed to create Quizz
+        """
         url = request.data.get('url')
+        check_url_format(str(url))
 
-        if url is None:
-             return Response({'detail': "url is missing"}, status=status.HTTP_400_BAD_REQUEST )
-
-        if not url.startswith('https://www.youtube.com/watch?v='):
-           return Response({'detail': "The entered URL is incorrect. The URL must begin with https://www.youtube.com/watch?v="}, status=status.HTTP_400_BAD_REQUEST )
-    
         audio_data = video_download(str(url))
         if audio_data:
             transcripted_text = transcripts_Audio_to_Text(audio_data)
@@ -62,48 +67,60 @@ class CreateQuizView(APIView):
 
 class QuizListView(ListAPIView):
     """
-    List all quizzes created by the authenticated user.
-
-    Permissions:
-        - User must be authenticated.
-
-    Behavior:
-        - GET: Returns a list of quizzes that belong only to the current user.
+    API view to list all quizzes created by the authenticated user.
+    Only quizzes that belong to the current user are returned.
     """
     serializer_class = QuizListSeralizer
     permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        user = request.user
+        """
+        Handle GET request to retrieve a list of quizzes:
 
+        1. Get the currently authenticated user.
+        2. Filter quizzes so only those created by this user are included.
+        3. Serialize the filtered quiz queryset.
+        4. Return the serialized quiz data as a response.
+        """
+        user = request.user
         queryset = Quiz.objects.filter(user=user)
         serializer = QuizListSeralizer(queryset, many=True)
         return Response(serializer.data)
     
 class QuizDetailView(RetrieveUpdateDestroyAPIView):
     """
-    Retrieve, update, or delete a specific quiz.
-
-    Permissions:
-        - User must be authenticated.
-        - User must be the owner of the quiz.
-
-    Behavior:
-        - GET: Retrieve quiz details.
-        - PUT/PATCH: Update quiz data.
-        - DELETE: Delete the quiz.
+    API view to retrieve, update, or delete a specific quiz.
+    Access is restricted to the authenticated owner of the quiz.
     """
 
     serializer_class = QuizListSeralizer    
     permission_classes = [IsAuthenticated, isOwnerFromTheQuiz]
 
     def get_object(self):
+        """
+        Retrieve the quiz object based on the provided primary key (pk):
+
+        1. Extract the quiz ID from the URL parameters.
+        2. Attempt to fetch the quiz from the database.
+        3. Check if the requesting user has permission to access this quiz.
+        4. Return the quiz object if all checks pass.
+        """
+
         pk = self.kwargs.get('pk')
         obj = get_object_or_404(Quiz, pk=pk)
         self.check_object_permissions(self.request, obj)
         return obj
     
     def destroy(self, request, *args, **kwargs):
+        """
+        Handle DELETE request to remove a quiz:
+
+        1. Extract the quiz ID from the URL parameters.
+        2. Retrieve the quiz object from the database.
+        3. Delete the quiz instance.
+        4. Return a success message confirming deletion.
+        """
+
         pk = self.kwargs.get('pk')
         user = request.user
         obj = get_object_or_404(Quiz, pk=pk)
